@@ -20,8 +20,13 @@ cp upgrade.py "$installation_path"
 
 echo "Setting permissions..."
 
-# Chmod sysupgrader
+# Chmod
 chmod +x "$installation_path"
+chmod +x postinst.py
+
+# Post installation
+echo "Running post install..."
+python3 postinst.py
 
 echo "Done."
 

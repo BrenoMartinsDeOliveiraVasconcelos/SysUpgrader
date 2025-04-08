@@ -108,13 +108,13 @@ def update_packg(package_manager: dict):
 
 
 def main():
-    console_log("Started System Upgrade Tool.", 0)
-
     if not is_sudo():
-        console_log("You must be root to run this script", 3)
+        print("Execute as root.")
         exit(1)
     else:
         console_log("Running as root. Permission granted.", 1)
+
+    console_log("Started System Upgrade Tool.", 0)
 
     # Create log file
     if not os.path.exists(log_path):
