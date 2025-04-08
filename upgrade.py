@@ -128,6 +128,7 @@ def main():
         console_log(f"Starting upgrade process for '{package_manager}'.", 0)
         try:
             output = update_packg(PACKAGE_MANAGERS[package_manager])
+
             return_data = output[0]
             command = output[1]
 
