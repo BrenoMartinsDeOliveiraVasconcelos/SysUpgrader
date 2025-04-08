@@ -81,10 +81,11 @@ def update_packg(package_manager: dict):
                 bufsize=1
             )
             stdout_lines = []
-            for line in iter(proc.stdout.readline, ''):
-                stripped_line = line.rstrip('\n')
-                console_log(stripped_line, 4)
-                stdout_lines.append(stripped_line)
+            with proc.stdout as stdout:
+                for line in stdout:
+                    stripped_line = line.rstrip('\n')
+                    console_log(stripped_line, 4)
+                    stdout_lines.append(stripped_line)
             proc.stdout.close()
             
             return_code = proc.wait()
