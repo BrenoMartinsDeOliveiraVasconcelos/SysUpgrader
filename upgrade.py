@@ -84,6 +84,8 @@ def update_packg(package_manager: dict):
 
 
 def main():
+    console_log("Started System Upgrade Tool.", 0)
+
     if not is_sudo():
         console_log("You must be root to run this script", 3)
         exit(1)
