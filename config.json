@@ -5,11 +5,11 @@
     },
     "pacman": {
         "path": "/usr/bin/pacman", 
-        "commands": ["-Syu"]
+        "commands": ["-Syu --noconfirm"]
     },
     "yay": {
         "path": "/usr/bin/yay", 
-        "commands": ["-Syu"]
+        "commands": ["-Syu --noconfirm"]
     },
     "snapd": {
         "path": "/usr/bin/snap", 

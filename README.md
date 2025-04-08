@@ -29,5 +29,6 @@ Following `json` syntax, to add or edit an entry the user must format it like st
     }
 }
 ```
+Note: Entry order matters. Execution is made line by line sequentially.
 
 **Warning: Make sure that only users allowed to run as root can edit the config file. The script can be DANGEROUS if misused.**
