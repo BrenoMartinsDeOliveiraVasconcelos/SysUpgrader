@@ -8,6 +8,9 @@ import json
 class PackageManagerNotFound(Exception):
     pass
 
+class PackageManagerIsNotExecutable(Exception):
+    pass
+
 # Package managers suported
 try:
     PACKAGE_MANAGERS = json.load(open("/etc/sysupgrader/config.json"))
@@ -56,6 +59,10 @@ def update_packg(package_manager: dict):
     """
     package_man_path = package_manager["path"]
     if os.path.exists(package_man_path):
+        # Check if package manager is executable
+        if not os.access(package_man_path, os.X_OK):
+            raise PackageManagerIsNotExecutable(f"Package manager {package_manager['path']} is not executable")
+
         # Iterate in list of args to run command
         result = None
         args = []
@@ -96,6 +103,8 @@ def main():
                 console_log(f"Failed to update '{package_manager}'. Return code: {return_data.returncode}. Error: {return_data.stderr.decode('utf-8')}. Command: {command}.", 3)
         except PackageManagerNotFound:
             console_log(f"Package manager '{package_manager}' not found. Ignoring.", 3)
+        except PackageManagerIsNotExecutable:
+            console_log(f"Package manager path for '{package_manager}' is not executable. Ignoring.", 3)
 
 if __name__ == '__main__':
     main()

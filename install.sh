@@ -1,22 +1,29 @@
 #!/bin/bash
 
+config_folder="/etc/sysupgrader"
+config_file="/etc/sysupgrader/config.json"
+installation_path="/usr/bin/sut"
+
 echo "Script started."
 
 # Place default config file in /etc/sysupgrader/config.json if it doesn't exist
-if [ ! -f /etc/sysupgrader/config.json ]; then
+if [ ! -f $config_file ]; then
     echo "Creating default config file..."
-    mkdir -p /etc/sysupgrader
-    cp config.json /etc/sysupgrader/config.json
+    mkdir -p "$config_folder"
+    cp config.json "$config_file"
 fi
 
-echo "Installing sysupgrader to /usr/bin/sut..."
+echo "Installing sysupgrader to $installation_path..."
 
 # Install sysupgrader to /usr/bin
-cp upgrade.py /usr/bin/sut
+cp upgrade.py "$installation_path"
 
 echo "Setting permissions..."
 
 # Chmod sysupgrader
-chmod +x /usr/bin/sut
+chmod +x "$installation_path"
 
 echo "Done."
+
+echo "Maybe you would like to edit config file on $config_file."
+echo "Warning: Only users with root access should edit config file. THIS SCRIPT IS POTTENTIALLY DANGEROUS."

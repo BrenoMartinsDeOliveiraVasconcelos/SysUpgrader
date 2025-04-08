@@ -3,14 +3,6 @@
         "path": "/usr/bin/apt-get", 
         "commands": ["update", "upgrade -y"]
     },
-    "snapd": {
-        "path": "/usr/bin/snap", 
-        "commands": ["refresh"]
-    },
-    "flatpak": {
-        "path": "/usr/bin/flatpak", 
-        "commands": ["update"]
-    },
     "pacman": {
         "path": "/usr/bin/pacman", 
         "commands": ["-Syu"]
@@ -18,5 +10,13 @@
     "yay": {
         "path": "/usr/bin/yay", 
         "commands": ["-Syu"]
+    },
+    "snapd": {
+        "path": "/usr/bin/snap", 
+        "commands": ["refresh"]
+    },
+    "flatpak": {
+        "path": "/usr/bin/flatpak", 
+        "commands": ["update"]
     }
 }
