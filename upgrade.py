@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import os
 import datetime
@@ -9,7 +9,11 @@ class PackageManagerNotFound(Exception):
     pass
 
 # Package managers suported
-PACKAGE_MANAGERS = json.load(open("config.json"))
+try:
+    PACKAGE_MANAGERS = json.load(open("/etc/sysupgrader/config.json"))
+except FileNotFoundError:
+    print("Run install.sh to install sysupgrader and generate default config.")
+    exit(1)
 
 # Get current time
 def now()->str:
@@ -52,25 +56,29 @@ def update_packg(package_manager: dict):
     """
     package_man_path = package_manager["path"]
     if os.path.exists(package_man_path):
-        # Iterate in args
-        for arg in package_manager["args"]:
+        # Iterate in list of args to run command
+        result = None
+        args = []
+        for command in package_manager["commands"]:
             args = [package_man_path]
             
             # Add args to command
-            args.extend(arg.split(" "))
+            args.extend(command.split(" "))
 
             # Run command
-            result = subprocess.run(args)
+            result = subprocess.run(args, stderr=subprocess.PIPE)
 
-            return result
-                
+            if result.returncode != 0:
+                break
+
+        return [result, " ".join(args)]
     else:
         raise PackageManagerNotFound(f"Package manager {package_manager['path']} not found")
 
 
 def main():
     if not is_sudo():
-        console_log("You must be root to run this script", 2)
+        console_log("You must be root to run this script", 3)
         exit(1)
     else:
         console_log("Running as root. Permission granted.", 1)
@@ -78,12 +86,14 @@ def main():
     for package_manager in PACKAGE_MANAGERS:
         console_log(f"Starting upgrade process for '{package_manager}'.", 0)
         try:
-            return_data = update_packg(PACKAGE_MANAGERS[package_manager])
+            return_array = update_packg(PACKAGE_MANAGERS[package_manager])
+            return_data = return_array[0]
+            command = return_array[1]
 
             if return_data.returncode == 0:
                 console_log(f"Successfully updated '{package_manager}'.", 1)
             else:
-                console_log(f"Failed to update '{package_manager}'. Return code: {return_data.returncode} {return_data.stderr.decode('utf-8')}.", 3)
+                console_log(f"Failed to update '{package_manager}'. Return code: {return_data.returncode}. Error: {return_data.stderr.decode('utf-8')}. Command: {command}.", 3)
         except PackageManagerNotFound:
             console_log(f"Package manager '{package_manager}' not found. Ignoring.", 3)
 

@@ -1,7 +1,22 @@
 {
-    "apt": {"path": "/usr/bin/apt-get", "args": ["update", "upgrade -y"]},
-    "snapd": {"path": "/usr/bin/snap", "args": ["refresh"]},
-    "flatpak": {"path": "/usr/bin/flatpak", "args": ["update"]},
-    "pacman": {"path": "/usr/bin/pacman", "args": ["-Syu"]},
-    "yay": {"path": "/usr/bin/yay", "args": ["-Syu"]}
+    "apt": {
+        "path": "/usr/bin/apt-get", 
+        "commands": ["update", "upgrade -y"]
+    },
+    "snapd": {
+        "path": "/usr/bin/snap", 
+        "commands": ["refresh"]
+    },
+    "flatpak": {
+        "path": "/usr/bin/flatpak", 
+        "commands": ["update"]
+    },
+    "pacman": {
+        "path": "/usr/bin/pacman", 
+        "commands": ["-Syu"]
+    },
+    "yay": {
+        "path": "/usr/bin/yay", 
+        "commands": ["-Syu"]
+    }
 }
