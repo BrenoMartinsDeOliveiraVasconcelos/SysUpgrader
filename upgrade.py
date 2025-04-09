@@ -55,13 +55,23 @@ def console_log(message: str, tp: int):
         f.write(f"{msg}\n")
 
 # Dermine is user is sudo
-def is_sudo():
-    return os.geteuid() == 0
+def is_sudo() -> int:
+    uid =os.geteuid()
+
+    if uid == 0:
+        # Check if command is executed with SUDO and not just root
+        if "SUDO_UID" in os.environ:
+            return int(os.environ["SUDO_UID"])
+        else:
+            return uid
+        
+    return False
+
 
 
 # Run package manager updates
 
-def update_packg(package_manager: dict):
+def update_packg(package_manager: dict, uid: int):
     package_man_path = package_manager["path"]
     if os.path.exists(package_man_path):
         if not os.access(package_man_path, os.X_OK):
@@ -73,8 +83,26 @@ def update_packg(package_manager: dict):
             args = [package_man_path]
             args.extend(shlex.split(command))
 
+            if not package_manager["execute_as_root"]:
+                args = ["sudo", "-u#"+str(uid)] + args
+
             proc = subprocess.Popen(
                 args,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
@@ -108,7 +136,8 @@ def update_packg(package_manager: dict):
 
 
 def main():
-    if not is_sudo():
+    sudo_uid = is_sudo()
+    if not sudo_uid:
         print("Execute as root.")
         exit(1)
     else:
@@ -127,7 +156,7 @@ def main():
         errors += 1
         console_log(f"Starting upgrade process for '{package_manager}'.", 0)
         try:
-            output = update_packg(PACKAGE_MANAGERS[package_manager])
+            output = update_packg(PACKAGE_MANAGERS[package_manager], sudo_uid)
 
             return_data = output[0]
             command = output[1]

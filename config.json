@@ -1,22 +1,27 @@
 {
     "apt": {
         "path": "/usr/bin/apt-get", 
-        "commands": ["update", "upgrade -y"]
+        "commands": ["update", "upgrade -y"],
+        "execute_as_root": true
     },
     "pacman": {
         "path": "/usr/bin/pacman", 
-        "commands": ["-Syu --noconfirm"]
+        "commands": ["-Syu --noconfirm"],
+        "execute_as_root": true
     },
     "yay": {
         "path": "/usr/bin/yay", 
-        "commands": ["-Syu --noconfirm"]
+        "commands": ["-Syu --noconfirm"],
+        "execute_as_root": false
     },
     "snapd": {
         "path": "/usr/bin/snap", 
-        "commands": ["refresh"]
+        "commands": ["refresh"],
+        "execute_as_root": true
     },
     "flatpak": {
         "path": "/usr/bin/flatpak", 
-        "commands": ["update -y --noninteractive"]
+        "commands": ["update -y --noninteractive"],
+        "execute_as_root": false
     }
 }
